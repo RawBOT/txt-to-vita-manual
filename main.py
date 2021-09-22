@@ -1,3 +1,5 @@
+# Copyright (c) 2021 RawBOT
+
 import math, os, sys
 from PIL import Image, ImageDraw, ImageFont
 
