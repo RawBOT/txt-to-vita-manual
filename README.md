@@ -6,17 +6,19 @@ This script converts a text file into a format suitable to use as a Vita's Bubbl
 
 It is intended to be used with text guides, like the ones found in sites like GameFAQs. It is configured to work with text files that follow console line width limitations (<80 characters per line) and most GameFAQs guides should follow this convention. With a font size of 22, it fits 22 lines per image. However, it can be configured by modifying the parameters in the script, such as changing the font, the font size, the number of lines in an image, etc.
 
+<!-- 
 ![manual-1](img/manual-1.jpg)
 ![manual-2](img/manual-2.jpg)
 ![manual-3](img/manual-3.jpg)
-<!-- 
+-->
+
 <table>
 <tr>
 <td><img src="img/manual-1.jpg"/></td>
 <td><img src="img/manual-2.jpg"/></td>
 <td><img src="img/manual-3.jpg"/></td>
 </tr>
-</table> -->
+</table> 
 
 ## Usage
 
