@@ -18,7 +18,7 @@ inc_row = 22
 # Other params
 max_lines_per_image = 22
 max_chars_per_line = 80
-output_dir = "output/"
+output_dir = "Manual/"
 
 if __name__ == "__main__":
     os.makedirs(output_dir, exist_ok=True)
