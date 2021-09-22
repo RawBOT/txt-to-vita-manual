@@ -21,7 +21,7 @@ max_chars_per_line = 80
 output_dir = "output/"
 
 if __name__ == "__main__":
-    os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
     txt_file_path = sys.argv[1]
     normal_font = ImageFont.truetype(font_path, size=font_size)
     half_font = ImageFont.truetype(font_path, size=int(font_size / 2))
