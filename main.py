@@ -13,7 +13,6 @@ font_size = 22
 fgcolor = "white"
 bgcolor = "black"
 start_coord = (35,30)
-inc_row = 22
 
 # Other params
 max_lines_per_image = 22
@@ -56,13 +55,10 @@ if __name__ == "__main__":
             text_coord = (int(img_size[0] - (start_coord[0] / 2)), 2)
             draw.text(text_coord, "{0} / {1}".format((current_page * max_lines_per_image), num_lines), \
                       font=half_font, fill=fgcolor, anchor="rt")
-            for i in range(max_lines_per_image):
-                line_idx = (current_page * max_lines_per_image) + i
-                if line_idx >= num_lines:
-                    break
-                row_coord = (start_coord[0],start_coord[1] + i * inc_row)
-                drawn_text = txt_content[line_idx].expandtabs()
-                draw.text(row_coord, drawn_text, font=normal_font, fill=fgcolor)
+            line_idx = slice(current_page*max_lines_per_image, \
+                             min((current_page*max_lines_per_image) + max_lines_per_image, num_lines))
+            drawn_text = ''.join(txt_content[line_idx]).expandtabs()
+            draw.multiline_text(start_coord, drawn_text, font=normal_font, fill=fgcolor, spacing=0)
             image.save(output_dir + "{0:03d}".format(current_page+1) + ".png")
     finally:
         input_file.close()
