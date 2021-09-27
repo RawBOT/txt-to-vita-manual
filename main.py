@@ -25,8 +25,19 @@ if __name__ == "__main__":
     txt_file_path = sys.argv[1]
     normal_font = ImageFont.truetype(font_path, size=font_size)
     half_font = ImageFont.truetype(font_path, size=int(font_size / 2))
-    with open(txt_file_path) as input_file:
+
+    # Open the file with UTF-8 encoding; if it fails, then with default
+    try:
+        input_file = open(txt_file_path, mode='r', encoding="UTF8")
         txt_content = input_file.readlines()
+    except UnicodeDecodeError:
+        input_file = open(txt_file_path, mode='r')
+        txt_content = input_file.readlines()
+    except:
+        print("ERROR: Unknown file encoding!")
+        quit()
+
+    try:
         num_lines = len(txt_content)
         num_pages = math.ceil(num_lines/max_lines_per_image)
         if num_pages > max_imgs:
@@ -54,3 +65,5 @@ if __name__ == "__main__":
                 draw.text(row_coord, txt_content[line_idx], font=normal_font, fill=fgcolor)
             image.save(output_dir + "{0:03d}".format(current_page+1) + ".png")
             current_page += 1
+    finally:
+        input_file.close()
