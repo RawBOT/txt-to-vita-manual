@@ -45,8 +45,7 @@ if __name__ == "__main__":
             print("ERROR:The text file exceeds the maximum length allowed!")
             print("      Current: {0}, Max: {1} lines".format(num_lines, max_lines))
             quit()
-        current_page = 0
-        while current_page < num_pages:
+        for current_page in range(num_pages):
             image = Image.new("RGB", img_size, bgcolor)
             draw = ImageDraw.Draw(image)
             # Draw border
@@ -62,8 +61,8 @@ if __name__ == "__main__":
                 if line_idx >= num_lines:
                     break
                 row_coord = (start_coord[0],start_coord[1] + i * inc_row)
-                draw.text(row_coord, txt_content[line_idx], font=normal_font, fill=fgcolor)
+                drawn_text = txt_content[line_idx].expandtabs()
+                draw.text(row_coord, drawn_text, font=normal_font, fill=fgcolor)
             image.save(output_dir + "{0:03d}".format(current_page+1) + ".png")
-            current_page += 1
     finally:
         input_file.close()
