@@ -1,6 +1,7 @@
 # Copyright (c) 2021 RawBOT
 
 import math, os, sys
+from optparse import OptionParser, OptionGroup
 from PIL import Image, ImageDraw, ImageFont
 
 class image_config:
@@ -10,14 +11,6 @@ class image_config:
         self.max_lines_per_image = max_lines_per_image
         self.start_coord = start_coord
         self.rotate = rotate
-
-max_imgs = 999
-font_path = "fonts/iosevka-fixed-regular.ttf"
-fgcolor = "white"
-bgcolor = "black"
-max_chars_per_line = 80
-output_dir = "Manual/"
-line_tracker_font_size = 11
 
 def fullscreen_image_config():
     return image_config((960, 544), 21, 23, (40,28), False)
@@ -31,22 +24,73 @@ def max_height_scrollable_image_config():
 def min_width_scrollable_image_config():
     return image_config((544, 1420), 11, 124, (33,26), False)  # "min" width / max height
 
-def best_width_scrollable_image_config():
+def mid_width_scrollable_image_config():
     return image_config((720, 1072), 15, 68, (40,26), False)  # 720 for less blurriness
 
 def vertical_image_config():
     return image_config((544, 960), 11, 82, (33,30), True)
 
-if __name__ == "__main__":
-    config = fullscreen_image_config()
-    # config = native_width_scrollable_image_config()
-    # config = max_height_scrollable_image_config()
-    # config = min_width_scrollable_image_config()
-    # config = best_width_scrollable_image_config()
-    # config = vertical_image_config()
+def setup_parser():
+    parser = OptionParser(usage="%prog [OPTIONS] FILE", version="%prog 1.2")
+    parser.set_description("Converts a text file into PNG files to be used as a Vita manual")
+    parser.add_option("-o", "--outputdir", dest="output_dir",
+                      help="Output images to DIR", metavar="DIR")
+    parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
+                      help="Outputs detailed status per file.")
 
-    os.makedirs(output_dir, exist_ok=True)
-    txt_file_path = sys.argv[1]
+    # Mode settings
+    mode_optgroup = OptionGroup(parser, "Vita Manual Mode, default=\"fullscreen\"")
+    mode_optgroup.add_option("--fullscreen", action="store_const", dest="mode",
+                             const=fullscreen_image_config(),
+                             help="Native Fullscreen (960x544)")
+    mode_optgroup.add_option("--native", action="store_const", dest="mode",
+                             const=native_width_scrollable_image_config(),
+                             help="Native Width with Scrolling (960x750)")
+    mode_optgroup.add_option("--maxheight", action="store_const", dest="mode",
+                             const=max_height_scrollable_image_config(),
+                             help="Max Possible Height with Scrolling (480x1500)")
+    mode_optgroup.add_option("--minwidth", action="store_const", dest="mode",
+                             const=min_width_scrollable_image_config(),
+                             help="Minimum Width with Scrolling (544x1420)")
+    mode_optgroup.add_option("--midwidth", action="store_const", dest="mode",
+                             const=mid_width_scrollable_image_config(),
+                             help="720px Width with Scrolling (720x1072)")
+    mode_optgroup.add_option("--vertical", action="store_const", dest="mode",
+                             const=vertical_image_config(),
+                             help="Native Fullscreen, but rotated. Hold your Vita sideways! (544x960)")
+
+    parser.add_option_group(mode_optgroup)
+
+    parser.set_defaults(output_dir="Manual/",
+                        verbose=False,
+                        mode=fullscreen_image_config())
+
+    return parser
+
+max_imgs = 999
+font_path = "fonts/iosevka-fixed-regular.ttf"
+fgcolor = "white"
+bgcolor = "black"
+max_chars_per_line = 80
+line_tracker_font_size = 11
+
+if __name__ == "__main__":
+    parser = setup_parser()
+    (options, args) = parser.parse_args()
+
+    if len(args) < 1:
+        print("ERROR: No input file provided!")
+        quit()
+    elif not os.path.exists(args[0]):
+        print("ERROR: Input file not found: {0}!".format(args[0]))
+        quit()
+    txt_file_path = args[0]
+    os.makedirs(options.output_dir, exist_ok=True)
+    config = options.mode
+
+    if options.verbose:
+        print("Input File: {0}".format(txt_file_path))
+        print("Output Dir: {0}".format(options.output_dir))
 
     # Load fonts
     normal_font = ImageFont.truetype(font_path, size=config.font_size)  # font used for guide text
@@ -76,8 +120,6 @@ if __name__ == "__main__":
 
         # main loop
         for current_page in range(num_pages):
-            print("Progress: {0} / {1}".format(current_page+1, num_pages))
-
             # Initialize image
             image = Image.new("RGB", config.image_size, bgcolor)
             draw = ImageDraw.Draw(image)
@@ -104,6 +146,10 @@ if __name__ == "__main__":
             # Save image with a [000].png format
             if config.rotate:
                 image = image.rotate(90, expand=True)
-            image.save(output_dir + "{0:03d}".format(current_page+1) + ".png")
+            output_path = options.output_dir + "{0:03d}".format(current_page+1) + ".png"
+            image.save(output_path)
+
+            if options.verbose == True: print("Writing: {0}".format(output_path))
+            print("Progress: {0} / {1}".format(current_page+1, num_pages))
     finally:
         input_file.close()
