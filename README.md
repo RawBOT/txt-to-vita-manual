@@ -20,19 +20,73 @@ It is intended to be used with text guides, like the ones found in sites like Ga
 </tr>
 </table> 
 
+## Modes
+
+* **Fullscreen:** Native Fullscreen (960x544)
+* **Native Width Scrollable:** Native Width with Scrolling (960x750)
+* **Max Height Scrollable:** Max Possible Height with Scrolling (480x1500)
+* **Minimum Width Scrollable:** Minimum Width with Scrolling (544x1420)
+* **Best Width Scrollable:** 720px Width with Scrolling (720x1072)
+* **Vertical:** Native Fullscreen, but rotated. Hold your Vita sideways! (544x960)
+
+### Examples
+
+[Link to examples](https://github.com/RawBOT/txt-to-vita-manual/tree/main/img)
+
+<table>
+<tr>
+<td>Fullscreen</td>
+<td>Best Width Scrollable</td>
+<td>Vertical</td>
+</tr>
+<tr>
+<td><img src="img/example_fullscreen/001.png"/></td>
+<td><img src="img/example_best_width_scrollable/001.png" /></td>
+<td><img src="img/example_vertical/001.png"/></td>
+</tr>
+</table>
+
 ## Usage
 
 The script has the following dependencies:
 * Python 3
 * Pillow `pip install Pillow`
 
-To use it, just pass the text file as the first argument:
+Here are the usage instructions:
 
-`python main.py text-file-example.txt`
+```
+Usage: main.py [OPTIONS] FILE
 
-Similarly, the stand-alone version (all dependencies included) can be used by passing the text file as an argument:
+Converts a text file into PNG files to be used as a Vita manual
 
-`txt-to-vita-manual.exe text-file-example.txt`
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -o DIR, --outputdir=DIR
+                        Output images to DIR
+  -v, --verbose         Outputs detailed status per file.
+
+  Vita Manual Mode, default="fullscreen":
+    --fullscreen        Native Fullscreen (960x544)
+    --native            Native Width with Scrolling (960x750)
+    --maxheight         Max Possible Height with Scrolling (480x1500)
+    --minwidth          Minimum Width with Scrolling (544x1420)
+    --midwidth          720px Width with Scrolling (720x1072)
+    --vertical          Native Fullscreen, but rotated. Hold your Vita
+                        sideways! (544x960)
+```
+
+For example, to output the standard "fullscreen" images:  
+`python main.py file.txt`
+
+Another example, to output "maxheight" images to a `output/` dir:  
+`python main.py --maxheight -o output/ file.txt`
+
+
+
+Similarly, the stand-alone version (all dependencies included) can be used by by replacing `python main.py` with `txt-to-vita-manual.exe`
+
+`txt-to-vita-manual.exe --fullscreen file.txt`
 
 ## Output and Using the Manual on the Vita
 
