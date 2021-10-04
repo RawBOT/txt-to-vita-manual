@@ -1,6 +1,7 @@
 # Copyright (c) 2021 RawBOT
 
 import math, os, sys
+import GuideDownloader
 from optparse import OptionParser, OptionGroup
 from PIL import Image, ImageDraw, ImageFont
 
@@ -81,34 +82,52 @@ if __name__ == "__main__":
     if len(args) < 1:
         print("ERROR: No input file provided!")
         quit()
-    elif not os.path.exists(args[0]):
-        print("ERROR: Input file not found: {0}!".format(args[0]))
-        quit()
-    txt_file_path = args[0]
-    os.makedirs(options.output_dir, exist_ok=True)
+    guide_filepath = args[0]
     config = options.mode
-
-    if options.verbose:
-        print("Input File: {0}".format(txt_file_path))
-        print("Output Dir: {0}".format(options.output_dir))
 
     # Load fonts
     normal_font = ImageFont.truetype(font_path, size=config.font_size)  # font used for guide text
     half_font = ImageFont.truetype(font_path, size=line_tracker_font_size)  # font used for top-right line idx
 
-    # Open the file with UTF-8 encoding; if it fails, then with default
-    try:
-        input_file = open(txt_file_path, mode='r', encoding="UTF8")
-        txt_content = input_file.readlines()
-    except UnicodeDecodeError:
-        input_file = open(txt_file_path, mode='r')
-        txt_content = input_file.readlines()
-    except:
-        print("ERROR: Unknown file encoding!")
-        quit()
-    finally:
-        input_file.close()
+    # Check if guide's filepath is local or remote
+    is_remote_url = GuideDownloader.is_remote_url(guide_filepath)
 
+    if is_remote_url:
+        guide_content = GuideDownloader.download_guide(guide_filepath)
+        if guide_content.is_textguide == True:
+            txt_content = guide_content.content
+        else:
+            print("ERROR: HTML guides not currently supported!")
+            quit()
+    else:
+        if not os.path.exists(args[0]):
+            print("ERROR: Input file not found: {0}!".format(args[0]))
+            quit()
+        # Open the file with UTF-8 encoding; if it fails, then with default
+        try:
+            input_file = open(guide_filepath, mode='r', encoding="UTF8")
+            txt_content = input_file.readlines()
+        except UnicodeDecodeError:
+            input_file = open(guide_filepath, mode='r')
+            txt_content = input_file.readlines()
+        except:
+            print("ERROR: Unknown file encoding!")
+            quit()
+        finally:
+            input_file.close()
+
+    if(txt_content == "" or txt_content == None):
+        print("ERROR: Text content empty. Invalid file!")
+        quit()
+
+    # Make destination directory
+    os.makedirs(options.output_dir, exist_ok=True)
+
+    if options.verbose:
+        print("Input File: {0}".format(guide_filepath))
+        print("Output Dir: {0}".format(options.output_dir))
+
+    # Start writing the text into image files
     num_lines = len(txt_content)  # num. lines in the text guide
     num_pages = math.ceil(num_lines/config.max_lines_per_image)  # num. of pages/images (rounded up) in the vita guide
 
