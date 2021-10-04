@@ -33,7 +33,8 @@ def vertical_image_config():
 
 def setup_parser():
     parser = OptionParser(usage="%prog [OPTIONS] FILE", version="%prog 1.2")
-    parser.set_description("Converts a text file into PNG files to be used as a Vita manual")
+    parser.set_description("Converts a text file into PNG files to be used as a Vita manual. " \
+        "If FILE_URL is remote (e.g. Internet), then it will be downloaded and processed.")
     parser.add_option("-o", "--outputdir", dest="output_dir",
                       help="Output images to DIR", metavar="DIR")
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose",

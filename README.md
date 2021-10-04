@@ -2,9 +2,14 @@
 
 ## Description
 
-This script converts a text file into a format suitable to use as a Vita's Bubble manual. This works by rendering the text file into a series of PNG files, naming them as 001.png, 002.png, and so on, and maximizing as much space as possible.
+This program takes a URL to an online text guide or to a local text file, and converts it into a format suitable to use as a Vita's Bubble manual. This works by rendering the text file into a series of PNG files, naming them as 001.png, 002.png, and so on, and maximizing as much space as possible.
 
-It is intended to be used with text guides, like the ones found in sites like GameFAQs. It is configured to work with text files that follow console line width limitations (<80 characters per line) and most GameFAQs guides should follow this convention. With a font size of 22, it fits 22 lines per image. However, it can be configured by modifying the parameters in the script, such as changing the font, the font size, the number of lines in an image, etc.
+It is intended to be used with text guides, like the ones found in sites like GameFAQs. It is configured to work with text files that follow console line width limitations (=<80 characters per line) and most GameFAQs guides should follow this convention. However, it can be configured into different modes by giving it input arguments (see [usage](#usage)).
+
+If trying to download a GameFAQs guide, use the URL that opens the guide normally, e.g.:
+`https://gamefaqs.gamespot.com/[console]/[game-id]/faqs/[faq-id]`
+
+Currently it does not support HTML guides, only text-based ones.
 
 <!-- 
 ![manual-1](img/manual-1.jpg)
@@ -51,13 +56,15 @@ It is intended to be used with text guides, like the ones found in sites like Ga
 The script has the following dependencies:
 * Python 3
 * Pillow `pip install Pillow`
+* BeautifulSoup4 `pip install beautifulsoup4`
 
 Here are the usage instructions:
 
 ```
-Usage: main.py [OPTIONS] FILE
+Usage: main.py [OPTIONS] FILE_URL
 
-Converts a text file into PNG files to be used as a Vita manual
+Converts a text file into PNG files to be used as a Vita manual.
+If FILE_URL is remote (e.g. Internet), then it will be downloaded and processed.
 
 Options:
   --version             show program's version number and exit
@@ -72,17 +79,22 @@ Options:
     --maxheight         Max Possible Height with Scrolling (480x1500)
     --minwidth          Minimum Width with Scrolling (544x1420)
     --midwidth          720px Width with Scrolling (720x1072)
-    --vertical          Native Fullscreen, but rotated. Hold your Vita
-                        sideways! (544x960)
+    --vertical          Native Fullscreen, but rotated. Hold your Vita sideways! (544x960)
 ```
 
-For example, to output the standard "fullscreen" images:  
-`python main.py file.txt`
+### Examples
 
-Another example, to output "maxheight" images to a `output/` dir:  
-`python main.py --maxheight -o output/ file.txt`
+Output a local text file as standard "fullscreen" images:  
+`python main.py test/test_simple.txt`
 
+Output a local text file as "maxheight" images to a `output/` dir:  
+`python main.py --maxheight -o output/ test/test_simple.txt`
 
+Download a text guide and output it:
+`python main.py https://example.com/text`
+
+Download a text guide from this repo and output as "native" images:  
+`python main.py --native https://raw.githubusercontent.com/RawBOT/txt-to-vita-manual/main/test/test_complex.txt`
 
 Similarly, the stand-alone version (all dependencies included) can be used by by replacing `python main.py` with `txt-to-vita-manual.exe`
 
@@ -90,7 +102,7 @@ Similarly, the stand-alone version (all dependencies included) can be used by by
 
 ## Output and Using the Manual on the Vita
 
-PNG files will be outputted to an `Manual/` directory in the working dir. To use them on a bubble on the Vita, there's two options:
+PNG files will be output by default to an `Manual/` directory in the working dir. To use them on a bubble on the Vita, there's two options:
 
 ### Existing Manual
 If the app/bubble you want to modify is a Vita game, or if it is a PSX/PSP bubble that already has a manual in the Live Area, then just copy and replace the PNG files in the app/bubble's directory, e.g. `ux0:app/<app-id>/sce_sys/Manual`. 
