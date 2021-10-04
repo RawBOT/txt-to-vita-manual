@@ -15,14 +15,22 @@ def is_remote_url(url):
 
 def download_guide(url):
     response = requests.Session().get(url, headers=request_headers)
-    soup = BeautifulSoup(response.text, features="html.parser")
 
-    # Parsing guide content
-    content = soup.select_one(".faqtext")
-    is_textguide = content != None
-    if(is_textguide):
-        lines = content.text.splitlines(keepends=True)
+    # Check if guide is a pure text document (URL usually ends in .txt)
+    if "text/plain" in response.headers["Content-type"]:
+        content = response.text
+        lines = content.splitlines(keepends=True)
         return GuideContent(lines, True)
+    # If not pure text, then treat as HTML
     else:
-        # Implement HTML guide parsing
-        return GuideContent([], False)
+        soup = BeautifulSoup(response.text, features="html.parser")
+        content = soup.select_one(".faqtext")
+        # Guide is a text-based (as opposed to new HTML guides)
+        is_textguide = content != None
+        if(is_textguide):
+            lines = content.text.splitlines(keepends=True)
+            return GuideContent(lines, True)
+        else:
+            # Implement HTML guide parsing
+            return GuideContent([], False)
+
