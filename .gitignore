@@ -129,8 +129,9 @@ dmypy.json
 .pyre/
 
 # Project specific
-Manual/
-fonts/
+[Mm]anual/
+[Ff]onts/
+[Ww]ip/
 *.png
 *.PNG
 *.txt
