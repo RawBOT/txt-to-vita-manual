@@ -4,6 +4,8 @@
 
 This program takes a URL to an online text guide or to a local text file, and converts it into a format suitable to use as a Vita's Bubble manual. This works by rendering the text file into a series of PNG files, naming them as 001.png, 002.png, and so on, and maximizing as much space as possible.
 
+This currently **only works with PSP/PSX bubbles** created by the user (unencrypted `ux0:app/` directories).
+
 It is intended to be used with text guides, like the ones found in sites like GameFAQs. It is configured to work with text files that follow console line width limitations (=<80 characters per line) and most GameFAQs guides should follow this convention. However, it can be configured into different modes by giving it input arguments (see [usage](#usage)).
 
 If trying to download a GameFAQs guide, use the URL that opens the guide normally, e.g.:
@@ -102,7 +104,7 @@ Similarly, the stand-alone version (all dependencies included) can be used by by
 
 ## Output and Using the Manual on the Vita
 
-PNG files will be output by default to an `Manual/` directory in the working dir. To use them on a bubble on the Vita, there's two options:
+PNG files will be output by default to an `Manual/` directory in the working dir. The manual can only be replaced on non-encrypted Vita apps, so only PSP and PSX bubbles created by [Adrenaline Bubble Manager (ABM)](https://github.com/ONElua/AdrenalineBubbleManager). To use them on a bubble on the Vita, there's two options:
 
 ### Existing Manual
 If the app/bubble you want to modify is a Vita game, or if it is a PSX/PSP bubble that already has a manual in the Live Area, then just copy and replace the PNG files in the app/bubble's directory, e.g. `ux0:app/<app-id>/sce_sys/Manual`. 
