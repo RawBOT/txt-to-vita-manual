@@ -121,3 +121,26 @@ If the PSP/PSX bubble you want to add the manual to, does not have a manual alre
 - After this, you'll now see the "manual" icon in the bubble's Live Area.
 
 Vita games without a manual cannot have a manual added.
+
+## FAQ
+
+* I don't want to install rePatch, is there a way to use the manuals?  
+  If you don't want to install rePatch, then you can only replace existing manuals on PSX/PSP bubbles that you made. To do this, copy and replace the PNG files in the app/bubble's directory, e.g. `ux0:app/<app-id>/sce_sys/manual`.  
+  This directory should already exist (every bubble with a working manual has it), and make sure to remove all files on this directory first. This is not recommended and the rePatch solution is preferable.  
+  Note: this will not work on Vita games, as their `app/` directory is encrypted and you cannot replace the manual (even if you did, it won't work).
+
+* When opening the manual, my Vita says that the file is corrupted!  
+  This could be due to a variety of reasons:
+  1. The images are too big dimension-wise (too wide or too high). I tested all presets and they all work with the Vita. They are designed to stretch the limits of what the Vita allows. If for some reason one preset doesn't work, try another one.
+  2. You replaced the encrypted files of a Vita game's manual (usually via FTP or USB). Since the PNG files you copied are not encrypted, they'll look corrupted to the Vita. Please use rePatch to replace Vita game's manuals. There's no current alternative (cannot encrypt the PNG files).
+
+* There's a mix and match between the original manual and the one I made.
+  This is a limitation of using rePatch. rePatch can only replace and add new files, it cannot remove existing ones.  
+  So if the original manual is 100-pages long (`001.png` to `100.png`), and you replace it with a 60-page manual (`001.png` to `060.png`), the last 40 images will be from the original manual (the original `061.png` to `100.png`).
+
+* What's my game ID? (shown as <app-id> in this README)  
+  You can find your game's ID in GameFAQs or any release database. In GameFAQs, it'll be in the `Release Data` section, under the `Product ID` column. Make sure to remove the hyphen (`-`).  
+  You could also look around your `ux0:app/` directory and try to find it out by looking at the game icons.
+
+* ABM doesn't let me install the manual images!  
+  Make sure that there's a directory between `ux0:ABM/` and `manual/`, for example: `ux0:ABM/AGAMEDIR/manual/`.
