@@ -2,9 +2,9 @@
 
 ## Description
 
-This program takes a URL to an online text guide or to a local text file, and converts it into a format suitable to use as a Vita's Bubble manual. This works by rendering the text file into a series of PNG files, naming them as 001.png, 002.png, and so on, and maximizing as much space as possible.
+This program takes a URL to an online text guide or to a local text file, and converts it into a format suitable to use as a Vita game's bubble manual. This can be used to replace the manual of any game, be it Vita, PSP and PSX.
 
-This currently **only works with PSP/PSX bubbles** created by the user (unencrypted `ux0:app/` directories).
+This program works by rendering the text file into a series of PNG files, naming them as `001.png`, `002.png`, and so on, and maximizing as much screen space as possible.
 
 It is intended to be used with text guides, like the ones found in sites like GameFAQs. It is configured to work with text files that follow console line width limitations (=<80 characters per line) and most GameFAQs guides should follow this convention. However, it can be configured into different modes by giving it input arguments (see [usage](#usage)).
 
@@ -12,6 +12,8 @@ If trying to download a GameFAQs guide, use the URL that opens the guide normall
 `https://gamefaqs.gamespot.com/[console]/[game-id]/faqs/[faq-id]`
 
 Currently it does not support HTML guides, only text-based ones.
+
+You will need [rePatch-reLoaded](https://github.com/SonicMastr/rePatch-reLoaded) to replace manuals from Vita games.
 
 <!-- 
 ![manual-1](img/manual-1.jpg)
@@ -104,18 +106,18 @@ Similarly, the stand-alone version (all dependencies included) can be used by by
 
 ## Output and Using the Manual on the Vita
 
-PNG files will be output by default to an `Manual/` directory in the working dir. The manual can only be replaced on non-encrypted Vita apps, so only PSP and PSX bubbles created by [Adrenaline Bubble Manager (ABM)](https://github.com/ONElua/AdrenalineBubbleManager). To use them on a bubble on the Vita, there's two options:
+PNG files will be output by default to a `manual/` directory in the working dir. Vita games have their `app/` directories encrypted, so you will need [rePatch-reLoaded](https://github.com/SonicMastr/rePatch-reLoaded) to replace their manual. To use them on a bubble on the Vita, there's two options:
 
 ### Existing Manual
-If the app/bubble you want to modify is a Vita game, or if it is a PSX/PSP bubble that already has a manual in the Live Area, then just copy and replace the PNG files in the app/bubble's directory, e.g. `ux0:app/<app-id>/sce_sys/Manual`. 
-
-Note: this directory should already exist (every bubble with a working manual has it), and make sure to remove all files on this directory first.
+If the app/bubble you want to modify is a Vita game or a PSX/PSP bubble that already has a manual in the Live Area, then you need to place the `manual/` directory in its repatch folder: `ux0:repatch/<app-id>/sce_sys/manual/`. 
 
 ### No manual
-If the bubble you want to add the manual to doesn't have a manual already (No "manual" book icon in the Live Area of the bubble), then you need to use [Adrenaline Bubble Manager (ABM)](https://github.com/ONElua/AdrenalineBubbleManager).
+If the PSP/PSX bubble you want to add the manual to, does not have a manual already (no "manual" book icon in the Live Area of the bubble), then you need to use [Adrenaline Bubble Manager (ABM)](https://github.com/ONElua/AdrenalineBubbleManager) to inject one.
 
-- Copy the `Manual` directory produced by this script to `ux0:ABM/<any-dir>`. Note that the final directory where the PNG files are must be `ux0:ABM/<any-dir>/Manual/*.png` 
+- Copy the `manual` directory produced by this script to `ux0:ABM/<any-dir>`. Note that the final directory where the PNG files are must be `ux0:ABM/<any-dir>/manual/*.png` 
 - On ABM, press `Circle` to modify bubbles, select your desired bubble and press `Cross` to "Inject imgs". 
-- Navigate to `<any-dir>`, and you should see `Manual` in the screen. 
+- Navigate to `<any-dir>`, and you should see `manual` directory in the screen. 
 - Press `Start` to "load all images to the bubble", and wait for the process to finish. 
 - After this, you'll now see the "manual" icon in the bubble's Live Area.
+
+Vita games without a manual cannot have a manual added.
