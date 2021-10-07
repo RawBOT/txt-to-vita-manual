@@ -63,7 +63,7 @@ def setup_parser():
 
     parser.add_option_group(mode_optgroup)
 
-    parser.set_defaults(output_dir="Manual/",
+    parser.set_defaults(output_dir="manual/",
                         verbose=False,
                         mode=fullscreen_image_config())
 
